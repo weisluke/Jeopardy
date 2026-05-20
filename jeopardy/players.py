@@ -1,6 +1,7 @@
 from PySide6.QtWidgets import QFrame
 from PySide6.QtGui import QResizeEvent
 from player import Player
+import numpy as np
 
 
 class Players(QFrame):
@@ -31,3 +32,14 @@ class Players(QFrame):
         for i, player in enumerate(self.players):
             player.setGeometry(0, self.height() * (h + dh) * i,
                                self.width(), self.height() * h)
+
+    @property
+    def flipping_players(self):
+        return np.any([player.state == Player.UNFLIPPED
+                       for player in self.players])
+
+    def flip_players(self):
+        for player in self.players:
+            if player.state == Player.UNFLIPPED:
+                player.next()
+                return

@@ -16,6 +16,7 @@ class Logo(QLabel):
                 padding: 5px;
             }
         """)
+        self.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
 
         where = Path(__file__).parent
         pixmap = QPixmap(f'{where}/jeopardy.png')
@@ -26,4 +27,3 @@ class Logo(QLabel):
         pixmap = pixmap.copy(rect)
 
         self.setPixmap(pixmap)
-        self.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
