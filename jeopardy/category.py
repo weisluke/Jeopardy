@@ -1,8 +1,6 @@
 from PySide6.QtWidgets import QFrame, QLabel, QSizePolicy
-from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt
 from question import Question
-from pathlib import Path
 
 
 class Category(QFrame):
@@ -16,9 +14,6 @@ class Category(QFrame):
             }
         """)
 
-        where = Path(__file__).parent
-        self.pixmap = QPixmap(f'{where}/jeopardy.png')
-
         self.board = board
         self.category = category
 
@@ -31,12 +26,11 @@ class Category(QFrame):
         self.title.setStyleSheet("""
             QLabel {
                 border: 2px solid black;
-                padding: 5px;
+                padding: 0px;
             }
         """)
-
-        self.title.setPixmap(self.pixmap)
         self.title.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
+        self.title.setPixmap(self.board.pixmap)
 
         self.questions = []
         for i, (question, answer) in enumerate(self.dat.items()):
@@ -47,7 +41,7 @@ class Category(QFrame):
 
     @property
     def num_questions(self):
-        return len(self.questions)
+        return len(self.dat)
     
     def resizeEvent(self, event):
         dh = self.height() / (self.num_questions + 1)
