@@ -2,6 +2,7 @@ from PySide6.QtWidgets import QMainWindow
 from PySide6.QtGui import QResizeEvent
 import json
 from logo import Logo
+from board import Board
 from players import Players
 
 
@@ -17,6 +18,7 @@ class Jeopardy(QMainWindow):
         self.logo = Logo(self)
 
         self.players = Players(self, self.dat["players"])
+        self.board = Board(self, 1, self.dat["rounds"]["1"])
 
         self.resize(1400,1000)
         self.show()
@@ -26,4 +28,6 @@ class Jeopardy(QMainWindow):
                               self.width() * 0.5, self.height() * 0.25)
         self.players.setGeometry(self.width() * 0.7, 0,
                                  self.width() * 0.3, self.height())
+        self.board.setGeometry(0, self.height() * 0.25,
+                               self.width() * 0.7, self.height() * 0.75)
         
