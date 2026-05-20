@@ -1,0 +1,33 @@
+from PySide6.QtWidgets import QFrame
+from PySide6.QtGui import QResizeEvent
+from player import Player
+
+
+class Players(QFrame):
+    
+    def __init__(self, parent, players):
+        QFrame.__init__(self, parent=parent)
+        self.setStyleSheet("""
+            QFrame {
+                border: 2px solid gray;
+                padding: 5px;
+                background-color: gray;
+            }
+        """)
+
+        self.players = []
+        for i, name in enumerate(players):
+            self.players.append(Player(self, name))
+
+    @property
+    def num_players(self):
+        return len(self.players)
+
+    def resizeEvent(self, event: QResizeEvent):
+        # 90% of the height is for players
+        h = 0.9 / self.num_players 
+        # 10% of the height is for spacing between players
+        dh = 0.1 / (self.num_players - 1) 
+        for i, player in enumerate(self.players):
+            player.setGeometry(0, self.height() * (h + dh) * i,
+                               self.width(), self.height() * h)

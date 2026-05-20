@@ -8,9 +8,14 @@ class Logo(QLabel):
 
     def __init__(self, parent=None):
         QLabel.__init__(self, parent=parent,
-                        scaledContents=True,
-                        alignment=(Qt.AlignVCenter | Qt.AlignHCenter),
-                        wordWrap=True)
+                        scaledContents=True)
+        self.setStyleSheet("""
+            QLabel {
+                background-color: gray;
+                border: 2px solid gray;
+                padding: 5px;
+            }
+        """)
 
         where = Path(__file__).parent
         pixmap = QPixmap(f'{where}/jeopardy.png')
@@ -22,11 +27,3 @@ class Logo(QLabel):
 
         self.setPixmap(pixmap)
         self.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
-
-        self.setStyleSheet("""
-            QLabel {
-                background-color: gray;
-                border: 2px solid gray;
-                padding: 5px;
-            }
-        """)
