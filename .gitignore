@@ -1,0 +1,3 @@
+*.txt
+*.json
+!game_blank.json
