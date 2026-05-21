@@ -1,6 +1,9 @@
 from PySide6.QtWidgets import QMainWindow, QPushButton
 from PySide6.QtGui import QResizeEvent
+from PySide6.QtCore import QUrl, QVariantAnimation, QTimer
+from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
 import json
+from pathlib import Path
 from logo import Logo
 from board import Board
 from players import Players
@@ -11,7 +14,8 @@ class Jeopardy(QMainWindow):
     # state codes
     INTRO = 0
     FLIP_PLAYERS = 1
-    FINAL_JEOPARDY = 2
+    FLIP_QUESTIONS = 2
+    FINAL_JEOPARDY = 3
 
     def __init__(self, file):
         QMainWindow.__init__(self)
@@ -41,6 +45,10 @@ class Jeopardy(QMainWindow):
         """)
         self.play.clicked.connect(self.update)
 
+        # Initialize the player and the output device
+        self.audio_output = QAudioOutput()
+        self.audio_player = QMediaPlayer(audioOutput=self.audio_output)
+
         self.resize(1400,1000)
         self.show()
 
@@ -62,14 +70,37 @@ class Jeopardy(QMainWindow):
     def update(self):
         match self.state:
             case self.INTRO:
-                print("THIS. IS. JEOPARDY!")
+                where = Path(__file__).parent
+                self.audio_player.setSource(QUrl.fromLocalFile(f'{where}/sounds/intro.mp3'))
+                self.audio_output.setVolume(1.0)
+
+                # 10 second fadeout from full volume to silent
+                self.fadeout = QVariantAnimation(duration=10000, startValue=1.0, endValue=0.0)
+                self.fadeout.valueChanged.connect(self.audio_output.setVolume)
+                self.fadeout.finished.connect(self.audio_player.stop)
+
+                self.audio_player.play()
+                # start fadeout after 10 seconds
+                QTimer.singleShot(10000, self.fadeout.start)
                 self.next()
             case self.FLIP_PLAYERS:
+                if self.audio_player.isPlaying():
+                    return
+                self.fadeout = None
                 self.players.flip_players()
                 if not self.players.flipping_players:
                     self.next()
+            case self.FLIP_QUESTIONS:
+                where = Path(__file__).parent
+                self.audio_player.setSource(QUrl.fromLocalFile(f'{where}/sounds/flip_questions.mp3'))
+                self.audio_output.setVolume(1.0)
+                self.audio_player.play()
+                self.board.flip_questions()
+                self.next()
             case self.FINAL_JEOPARDY:
+                if self.audio_player.isPlaying():
+                    return
                 print("FINAL JEOPARDY!")
                 self.next()
             case _:
-                pass
+                return
