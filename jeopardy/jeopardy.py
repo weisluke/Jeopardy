@@ -11,6 +11,9 @@ from players import Players
 
 class Jeopardy(QMainWindow):
 
+    on_question_selected = Signal(object)
+    on_question_completed = Signal()
+
     # state codes
     INTRO = 0
     FLIP_PLAYERS = 1
@@ -66,6 +69,9 @@ class Jeopardy(QMainWindow):
         # Initialize the player and the output device
         self.audio_output = QAudioOutput()
         self.audio_player = QMediaPlayer(audioOutput=self.audio_output)
+
+        self.on_question_selected.connect(self.question_selected)
+        self.on_question_completed.connect(self.question_completed)
 
         self.resize(1400,1000)
         self.show()
@@ -139,3 +145,20 @@ class Jeopardy(QMainWindow):
                 self.next()
             case _:
                 return
+            
+    def question_selected(self, question):
+        self.curr_question = question
+        
+        for player in self.players.players:
+            player.can_buzz = True
+
+        self.board.display.show()
+        self.board.display.setText(self.curr_question.text())
+
+        print(f'Question: {self.curr_question.question}')
+        print(f'Answer: {self.curr_question.answer}')
+        print()
+    
+    def question_completed(self):
+        self.curr_question = None
+        self.board.display.hide()

@@ -25,9 +25,18 @@ class Question(QLabel):
         self.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
 
         self.state = self.UNFLIPPED
+        self.category = category
         self.question = question
         self.answer = answer
         self.cost = cost
+
+    @property
+    def root(self):
+        return self.topLevelWidget()
+    
+    @property
+    def board(self):
+        return self.category.board
 
     def next(self):
         if self.state <= self.ANSWER:
@@ -65,4 +74,13 @@ class Question(QLabel):
             case self.ANSWER:
                 self.setText(self.answer)
             case _:
-                return
+                self.setText("")
+                if self.root.curr_question == self:
+                    self.root.on_question_completed.emit()
+            
+    def mouseReleaseEvent(self, event):
+        if self.board.flipping:
+            return
+        if self.state > self.ANSWER:
+            return
+        self.root.on_question_selected.emit(self)
