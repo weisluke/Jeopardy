@@ -25,6 +25,20 @@ class Jeopardy(QMainWindow):
         with open(file) as f:
             self.dat = json.load(f)
         
+        # make sure there is at least one round
+        assert self.MAX_NUM_ROUNDS >= 1
+        # check that the keys of the rounds are strings of integers
+        # ranging from 1 to the maximum number of rounds
+        assert (set([int(r) for r in self.dat['rounds'].keys()])
+                == set(range(1, self.MAX_NUM_ROUNDS + 1)))
+        self.round = 1
+
+        # ensure that all categories have the same number of questions
+        num_questions = [len(questions)
+                         for round, categories in self.dat['rounds'].items()
+                         for category, questions in categories.items()]
+        assert all([n == num_questions[0] for n in num_questions])
+        
         self.state = self.INTRO
 
         self.logo = Logo(self)
@@ -63,6 +77,10 @@ class Jeopardy(QMainWindow):
         
         self.play.setGeometry(self.width() * 0.025, self.height() * 0.1, 
                               self.width() * 0.05, self.height() * 0.05)
+
+    @property
+    def MAX_NUM_ROUNDS(self):
+        return len(self.dat['rounds'])
 
     def next(self):
         if self.state <= self.FINAL_JEOPARDY:
