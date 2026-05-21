@@ -20,7 +20,8 @@ class Jeopardy(QMainWindow):
     FLIP_QUESTIONS = 2
     FLIP_CATEGORIES = 3
     QUESTIONS = 4
-    FINAL_JEOPARDY = 5
+    ROUND_COMPLETE = 5
+    FINAL_JEOPARDY = 6
 
     def __init__(self, file):
         QMainWindow.__init__(self)
@@ -138,9 +139,20 @@ class Jeopardy(QMainWindow):
                 self.board.next()
                 if not self.board.answering_questions:
                     self.next()
-            case self.FINAL_JEOPARDY:
-                if self.audio_player.isPlaying():
+            case self.ROUND_COMPLETE:
+                if self.board.round < self.MAX_NUM_ROUNDS:
+                    self.round += 1
+                    self.board.deleteLater()
+                    self.board = Board(self, self.round, self.dat["rounds"][str(self.round)])
+                    self.board.show()
+                    self.resizeEvent(None)
+                    self.players.board = self.board
+                    for player in self.players.players:
+                        player.board = self.board
+                    self.state = self.FLIP_QUESTIONS
                     return
+                self.next()
+            case self.FINAL_JEOPARDY:
                 print("FINAL JEOPARDY!")
                 self.next()
             case _:
