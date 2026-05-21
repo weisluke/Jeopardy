@@ -15,7 +15,8 @@ class Jeopardy(QMainWindow):
     INTRO = 0
     FLIP_PLAYERS = 1
     FLIP_QUESTIONS = 2
-    FINAL_JEOPARDY = 3
+    FLIP_CATEGORIES = 3
+    FINAL_JEOPARDY = 4
 
     def __init__(self, file):
         QMainWindow.__init__(self)
@@ -96,6 +97,15 @@ class Jeopardy(QMainWindow):
                 self.audio_output.setVolume(1.0)
                 self.audio_player.play()
                 self.board.flip_questions()
+                self.next()
+            case self.FLIP_CATEGORIES:
+                if self.board.flipping_questions:
+                    return
+                self.board.display.show()
+                if self.board.flipping_categories:
+                    self.board.flip_categories()
+                    return
+                self.board.display.hide()
                 self.next()
             case self.FINAL_JEOPARDY:
                 if self.audio_player.isPlaying():

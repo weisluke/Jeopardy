@@ -37,9 +37,20 @@ class Question(QLabel):
     def update(self):
         match self.state:
             case self.UNFLIPPED:
-                pass
+                return
             case self.COST:
                 self.setText(f"${self.cost}")
+                self.setStyleSheet("""
+                    QLabel {
+                        font-size: 25pt;
+                        font-weight: bold;
+                        font: 'Times New Roman';
+                        color: gold;
+                        background-color: blue;
+                    }
+                """)
+            case self.QUESTION:
+                self.setText(self.question)
                 self.setStyleSheet("""
                     QLabel {
                         font-size: 25pt;
@@ -49,11 +60,9 @@ class Question(QLabel):
                         background-color: blue;
                     }
                 """)
-            case self.QUESTION:
-                self.setText(self.question)
             case self.BUZZING:
                 pass
             case self.ANSWER:
                 self.setText(self.answer)
             case _:
-                pass
+                return

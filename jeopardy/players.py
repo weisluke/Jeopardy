@@ -20,10 +20,6 @@ class Players(QFrame):
         for i, name in enumerate(players):
             self.players.append(Player(self, name))
 
-    @property
-    def num_players(self):
-        return len(self.players)
-
     def resizeEvent(self, event: QResizeEvent):
         # 90% of the height is for players
         h = 0.9 / self.num_players 
@@ -32,6 +28,10 @@ class Players(QFrame):
         for i, player in enumerate(self.players):
             player.setGeometry(0, self.height() * (h + dh) * i,
                                self.width(), self.height() * h)
+
+    @property
+    def num_players(self):
+        return len(self.players)
 
     @property
     def flipping_players(self):

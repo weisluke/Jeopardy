@@ -5,6 +5,10 @@ from question import Question
 
 class Category(QFrame):
 
+    # state codes
+    UNFLIPPED = 0
+    CATEGORY = 1
+
     def __init__(self, board, category, dat):
         QFrame.__init__(self, board)
         self.setStyleSheet("""
@@ -14,6 +18,7 @@ class Category(QFrame):
             }
         """)
 
+        self.state = self.UNFLIPPED
         self.board = board
         self.category = category
 
@@ -38,13 +43,37 @@ class Category(QFrame):
             self.questions.append(Question(self, question, answer, 
                                            100 * i * self.board.round)
                                   )
-
-    @property
-    def num_questions(self):
-        return len(self.dat)
     
     def resizeEvent(self, event):
         dh = self.height() / (self.num_questions + 1)
         self.title.setGeometry(0, 0, self.width(), dh)
         for i, question in enumerate(self.questions):
             question.setGeometry(0, dh * (i + 1), self.width(), dh)
+
+    @property
+    def num_questions(self):
+        return len(self.dat)
+    
+    def next(self):
+        if self.state <= self.CATEGORY:
+            self.state += 1
+        self.update()
+
+    def update(self):
+        match self.state:
+            case self.UNFLIPPED:
+                return
+            case self.CATEGORY:
+                self.title.setText(self.category)
+                self.title.setStyleSheet("""
+                    QLabel {
+                        font-size: 25pt;
+                        font-weight: bold;
+                        font: 'Times New Roman';
+                        color: white;
+                        background: blue;
+                    }
+                """)
+                self.next()
+            case _:
+                return

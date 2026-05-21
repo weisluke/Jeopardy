@@ -110,3 +110,19 @@ class Board(QFrame):
             if self.categories[i].questions[j].state == Question.UNFLIPPED:
                 QTimer.singleShot(time_to_flip * (t + 1),
                                   self.categories[i].questions[j].next)
+                
+    @property
+    def flipping_categories(self):
+        return np.any([category.state == Category.UNFLIPPED
+                       for category in self.categories])
+    
+    def flip_categories(self):
+        for category in self.categories:
+            if category.state == Category.UNFLIPPED:
+                category.next()
+                self.display.setText(category.category)
+                return
+            
+    @property
+    def flipping(self):
+        return self.flipping_questions or self.flipping_categories
