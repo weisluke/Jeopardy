@@ -1,5 +1,5 @@
-from PySide6.QtWidgets import QFrame
-from PySide6.QtGui import QPixmap, QResizeEvent
+from PySide6.QtWidgets import QFrame, QLabel
+from PySide6.QtGui import QPixmap, QResizeEvent, Qt
 from PySide6.QtCore import QRect, QTimer, QUrl, QEventLoop
 from PySide6.QtMultimedia import QMediaPlayer
 from category import Category
@@ -36,11 +36,29 @@ class Board(QFrame):
             for j, question in enumerate(category.questions):
                 rect = QRect(width * i, height * j, width, height)
                 question.setPixmap(self.pixmap.copy(rect))
+
+        self.display = QLabel(self, 
+                              alignment=(Qt.AlignVCenter | Qt.AlignHCenter),
+                              wordWrap=True)
+        self.display.setStyleSheet("""
+            QLabel {
+                font-size: 60pt;
+                font-weight: bold;
+                font: 'Times New Roman';
+                color: white;
+                border: 2px solid black;
+                padding: 0px;
+                background-color: blue;
+            }
+        """)
+        self.display.hide()
    
     def resizeEvent(self, event: QResizeEvent):
         dw = self.width() / self.num_categories
         for i, category in enumerate(self.categories):
             category.setGeometry(dw * i, 0, dw, self.height())
+        dh = self.height() / (self.num_questions + 1)
+        self.display.setGeometry(0, dh, self.width(), dh * self.num_questions)
 
     @property
     def num_categories(self):
