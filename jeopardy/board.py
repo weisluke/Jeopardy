@@ -61,6 +61,10 @@ class Board(QFrame):
         self.display.setGeometry(0, dh, self.width(), dh * self.num_questions)
 
     @property
+    def root(self):
+        return self.topLevelWidget()
+        
+    @property
     def num_categories(self):
         return len(self.dat)
 
@@ -126,3 +130,24 @@ class Board(QFrame):
     @property
     def flipping(self):
         return self.flipping_questions or self.flipping_categories
+
+    @property
+    def answering_questions(self):
+        return np.any([question.state <= Question.ANSWER
+                       for category in self.categories
+                       for question in category.questions])
+
+    def next(self):
+        # cannot advance if no question selected
+        if self.root.curr_question is None:
+            return
+        # cannot advance if player has been locked in
+        if self.root.curr_player is not None:
+            return
+        
+        self.root.curr_question.next()
+
+        if self.root.curr_question is not None:
+            self.display.setText(self.root.curr_question.text())
+        else:
+            self.display.setText("")

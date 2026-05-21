@@ -16,7 +16,8 @@ class Jeopardy(QMainWindow):
     FLIP_PLAYERS = 1
     FLIP_QUESTIONS = 2
     FLIP_CATEGORIES = 3
-    FINAL_JEOPARDY = 4
+    QUESTIONS = 4
+    FINAL_JEOPARDY = 5
 
     def __init__(self, file):
         QMainWindow.__init__(self)
@@ -40,6 +41,8 @@ class Jeopardy(QMainWindow):
         assert all([n == num_questions[0] for n in num_questions])
         
         self.state = self.INTRO
+        self.curr_question = None  # current question selected
+        self.curr_player = None  # current player buzzed in with an answer
 
         self.logo = Logo(self)
 
@@ -125,6 +128,10 @@ class Jeopardy(QMainWindow):
                     return
                 self.board.display.hide()
                 self.next()
+            case self.QUESTIONS:
+                self.board.next()
+                if not self.board.answering_questions:
+                    self.next()
             case self.FINAL_JEOPARDY:
                 if self.audio_player.isPlaying():
                     return
