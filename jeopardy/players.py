@@ -30,6 +30,14 @@ class Players(QFrame):
                                self.width(), self.height() * h)
 
     @property
+    def root(self):
+        return self.topLevelWidget()
+    
+    @property
+    def board(self):
+        return self.root.board
+
+    @property
     def num_players(self):
         return len(self.players)
 

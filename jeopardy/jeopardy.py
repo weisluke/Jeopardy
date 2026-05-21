@@ -51,7 +51,7 @@ class Jeopardy(QMainWindow):
         self.logo = Logo(self)
 
         self.players = Players(self, self.dat["players"])
-        self.board = Board(self, 1, self.dat["rounds"]["1"])
+        self.board = Board(self, self.round, self.dat["rounds"][str(self.round)])
 
         self.play = QPushButton("▶", self)
         self.play.setStyleSheet("""
@@ -146,9 +146,6 @@ class Jeopardy(QMainWindow):
                     self.board = Board(self, self.round, self.dat["rounds"][str(self.round)])
                     self.board.show()
                     self.resizeEvent(None)
-                    self.players.board = self.board
-                    for player in self.players.players:
-                        player.board = self.board
                     self.state = self.FLIP_QUESTIONS
                     return
                 self.next()
