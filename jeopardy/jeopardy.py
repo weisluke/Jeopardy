@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QMainWindow, QPushButton
 from PySide6.QtGui import QResizeEvent
-from PySide6.QtCore import QUrl, QVariantAnimation, QTimer
+from PySide6.QtCore import QUrl, QVariantAnimation, QTimer, Signal
 from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
 import json
 from pathlib import Path
