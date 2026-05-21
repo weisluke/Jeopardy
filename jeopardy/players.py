@@ -43,3 +43,8 @@ class Players(QFrame):
             if player.state == Player.UNFLIPPED:
                 player.next()
                 return
+    
+    @property
+    def can_buzz(self):
+        return np.any([player.can_buzz
+                       for player in self.players])
