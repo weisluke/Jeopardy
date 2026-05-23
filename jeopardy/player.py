@@ -92,14 +92,14 @@ class Player(QFrame):
 
     def resizeEvent(self, event: QResizeEvent):
         self.labels["money"].setGeometry(0, 0, 
-                                         self.width() * 0.9, self.height() * 0.5)
+                                         self.width() * 0.85, self.height() * 0.5)
         self.labels["background"].setGeometry(0, self.height() * 0.5, 
                                               self.width(), self.height() * 0.5)
         self.labels["name"].resize(self.labels["background"].size())
-        self.buttons["add_money"].setGeometry(self.width() * 0.9, 0,
-                                              self.width() * 0.1, self.height() * 0.25)
-        self.buttons["subtract_money"].setGeometry(self.width() * 0.9, self.height() * 0.25,
-                                                   self.width() * 0.1, self.height() * 0.25)
+        self.buttons["add_money"].setGeometry(self.width() * 0.85, 0,
+                                              self.width() * 0.15, self.height() * 0.25)
+        self.buttons["subtract_money"].setGeometry(self.width() * 0.85, self.height() * 0.25,
+                                                   self.width() * 0.15, self.height() * 0.25)
         
     @property
     def root(self):
