@@ -187,5 +187,5 @@ class Player(QFrame):
         if event.text() != str(self.index):
             return
         
-        self.root.on_player_selected.emit(self)      
-        print(f"{self.name} buzzed in\n")  
+        self.root.on_player_selected.emit(self)
+        print(f"{self.name} buzzed in\n")
