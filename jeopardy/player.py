@@ -80,6 +80,8 @@ class Player(QFrame):
                 padding: 5px;
             }
         """)
+        self.buttons["add_money"].clicked.connect(self.add_money)
+        self.buttons["subtract_money"].clicked.connect(self.subtract_money)
 
         self.update()
 
@@ -150,3 +152,20 @@ class Player(QFrame):
                     background-color: blue;
                 }
             """)
+
+    def add_money(self):
+        if self.root.curr_player is not self:
+            return
+        amount = self.root.curr_question.cost
+        self.money += amount
+        self.root.on_question_answered.emit()
+        self.update()
+
+    def subtract_money(self):
+        if self.root.curr_player is not self:
+            return
+        amount = self.root.curr_question.cost
+        self.money -= amount
+        self.can_buzz = False
+        self.root.on_player_deselected.emit()
+        self.update()
