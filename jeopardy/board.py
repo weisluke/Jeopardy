@@ -90,10 +90,10 @@ class Board(QFrame):
         # Create a local event loop to force synchronous waiting
         loop = QEventLoop()
         # Unblock the loop only when the media is fully loaded
-        def check_status(status):
+        def check_status(status, loop):
             if status == QMediaPlayer.MediaStatus.LoadedMedia:
                 loop.quit()
-        audio_player.mediaStatusChanged.connect(check_status)
+        audio_player.mediaStatusChanged.connect(lambda x: check_status(x, loop))
         # Start the local loop (blocks execution here)
         loop.exec()
 
