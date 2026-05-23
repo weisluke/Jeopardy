@@ -14,6 +14,8 @@ class Jeopardy(QMainWindow):
     on_question_selected = Signal(object)
     on_question_answered = Signal()
     on_question_completed = Signal()
+    on_player_selected = Signal(object)
+    on_player_deselected = Signal()
 
     # state codes
     INTRO = 0
@@ -75,6 +77,9 @@ class Jeopardy(QMainWindow):
         self.on_question_selected.connect(self.question_selected)
         self.on_question_answered.connect(self.question_answered)
         self.on_question_completed.connect(self.question_completed)
+        
+        self.on_player_selected.connect(self.player_selected)
+        self.on_player_deselected.connect(self.player_deselected)
 
         self.resize(1400,1000)
         self.show()
@@ -178,3 +183,10 @@ class Jeopardy(QMainWindow):
     def question_completed(self):
         self.curr_question = None
         self.board.display.hide()
+    
+    def player_selected(self, player):
+        self.curr_player = player
+
+    def player_deselected(self):
+        self.curr_player = None
+        self.curr_question.update()

@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import QFrame, QLabel, QSizePolicy, QPushButton
-from PySide6.QtGui import QPixmap, QResizeEvent
+from PySide6.QtGui import QPixmap, QResizeEvent, QKeyEvent
 from PySide6.QtCore import QRect, Qt
 from pathlib import Path
 
@@ -82,6 +82,11 @@ class Player(QFrame):
         """)
         self.buttons["add_money"].clicked.connect(self.add_money)
         self.buttons["subtract_money"].clicked.connect(self.subtract_money)
+
+        self.root.on_player_selected.connect(self.update)
+        self.root.on_player_deselected.connect(self.update)
+
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
         self.update()
 
@@ -169,3 +174,18 @@ class Player(QFrame):
         self.can_buzz = False
         self.root.on_player_deselected.emit()
         self.update()
+
+    @property
+    def index(self):
+        return self.root.players.players.index(self) + 1
+
+    def keyPressEvent(self, event: QKeyEvent):
+        if not self.can_buzz:
+            return
+        if self.root.curr_question is None:
+            return
+        if event.text() != str(self.index):
+            return
+        
+        self.root.on_player_selected.emit(self)      
+        print(f"{self.name} buzzed in\n")  
