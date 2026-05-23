@@ -8,16 +8,9 @@ class Players(QFrame):
     
     def __init__(self, parent, players):
         QFrame.__init__(self, parent=parent)
-        self.setStyleSheet("""
-            QFrame {
-                border: 2px solid gray;
-                padding: 5px;
-                background-color: gray;
-            }
-        """)
 
         self.players = []
-        for i, name in enumerate(players):
+        for name in players:
             self.players.append(Player(self, name))
 
     def resizeEvent(self, event: QResizeEvent):
