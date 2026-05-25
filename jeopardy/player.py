@@ -83,10 +83,10 @@ class Player(QFrame):
         self.buttons["add_money"].clicked.connect(self.add_money)
         self.buttons["subtract_money"].clicked.connect(self.subtract_money)
 
+        self.root.on_buzz.connect(self.buzz)
+
         self.root.on_player_selected.connect(self.update)
         self.root.on_player_deselected.connect(self.update)
-
-        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
         self.update()
 
@@ -179,12 +179,12 @@ class Player(QFrame):
     def index(self):
         return self.root.players.players.index(self) + 1
 
-    def keyPressEvent(self, event: QKeyEvent):
+    def buzz(self, player):
+        if player != self.index:
+            return
         if not self.can_buzz:
             return
         if self.root.curr_question is None:
-            return
-        if event.text() != str(self.index):
             return
         
         self.root.on_player_selected.emit(self)

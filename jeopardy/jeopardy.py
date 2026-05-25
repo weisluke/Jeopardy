@@ -14,6 +14,7 @@ class Jeopardy(QMainWindow):
     on_question_selected = Signal(object)
     on_question_answered = Signal()
     on_question_completed = Signal()
+    on_buzz = Signal(object)
     on_player_selected = Signal(object)
     on_player_deselected = Signal()
 
@@ -184,7 +185,13 @@ class Jeopardy(QMainWindow):
     def question_completed(self):
         self.curr_question = None
         self.board.display.hide()
-    
+
+    def keyPressEvent(self, event: QKeyEvent):
+        key = event.key()
+        if Qt.Key.Key_0 <= key <= Qt.Key.Key_9:
+            text = event.text()
+            self.on_buzz.emit(int(text))
+        
     def player_selected(self, player):
         self.curr_player = player
 
