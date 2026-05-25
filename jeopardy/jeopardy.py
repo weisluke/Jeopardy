@@ -29,6 +29,7 @@ class Jeopardy(QMainWindow):
     def __init__(self, file):
         QMainWindow.__init__(self)
         self.setWindowTitle("Jeopardy")
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
         with open(file) as f:
             self.dat = json.load(f)

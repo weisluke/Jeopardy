@@ -12,12 +12,6 @@ class Board(QFrame):
 
     def __init__(self, parent, round, dat):
         QFrame.__init__(self, parent)
-        self.setStyleSheet("""
-            QFrame {
-                border: 2px solid gray;
-                padding: 5px;
-            }
-        """)
 
         where = Path(__file__).parent
         self.pixmap = QPixmap(f'{where}/jeopardy.png')
