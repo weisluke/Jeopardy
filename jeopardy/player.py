@@ -85,8 +85,8 @@ class Player(QFrame):
 
         self.root.on_buzz.connect(self.buzz)
 
-        self.root.on_player_selected.connect(self.update)
-        self.root.on_player_deselected.connect(self.update)
+        self.root.on_player_selected.connect(self.player_selected)
+        self.root.on_player_deselected.connect(self.player_deselected)
 
         self.update()
 
@@ -120,15 +120,6 @@ class Player(QFrame):
                 pass
             case self.NAME:
                 self.labels["name"].setText(self.name)
-                self.labels["name"].setStyleSheet("""
-                    QLabel {
-                        font-size: 50pt;
-                        font-weight: bold;
-                        font: 'Times New Roman';
-                        color: white;
-                        background: transparent;
-                    }
-                """)
                 # immediately move to the next state
                 # once we've flipped the name
                 self.next()
@@ -189,3 +180,31 @@ class Player(QFrame):
         
         self.root.on_player_selected.emit(self)
         print(f"{self.name} buzzed in\n")
+
+    def player_selected(self, player):
+        if player is not self:
+            return
+        self.labels["name"].setStyleSheet("""
+                QLabel {
+                    font-size: 50pt;
+                    font-weight: bold;
+                    font: 'Times New Roman';
+                    color: white;
+                    background: transparent;
+                    border: 5px solid lawngreen;
+                    padding: 5px;                   
+                }
+            """)
+        self.update()
+        
+    def player_deselected(self):
+        self.labels["name"].setStyleSheet("""
+                QLabel {
+                    font-size: 50pt;
+                    font-weight: bold;
+                    font: 'Times New Roman';
+                    color: white;
+                    background: transparent;
+                }
+            """)
+        self.update()
