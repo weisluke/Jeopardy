@@ -22,7 +22,7 @@ class Player(QFrame):
         self.state = self.UNFLIPPED
         self.name = name
         self.money = 0
-        self.can_buzz = True
+        self.can_buzz = False
 
         # Labels for displaying the player's money and name
         self.labels = {}

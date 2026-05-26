@@ -1,5 +1,6 @@
 from PySide6.QtWidgets import QLabel, QSizePolicy
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QTimer
+import numpy as np
 
 
 class Question(QLabel):
@@ -25,6 +26,7 @@ class Question(QLabel):
         self.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
 
         self.state = self.UNFLIPPED
+        self.can_buzz = False  # whether or not this question can be buzzed on
         self.category = category
         self.question = question
         self.answer = answer
@@ -39,6 +41,13 @@ class Question(QLabel):
         return self.category.board
 
     def next(self):
+        # if waiting on players to buzz in,
+        # and all of the players can still buzz in,
+        # don't accidentally move forward to the answer
+        if (self.state == self.BUZZING
+                and self.root.players.can_buzz):
+            return
+        
         if self.state <= self.ANSWER:
             self.state += 1
         self.update()
@@ -56,6 +65,8 @@ class Question(QLabel):
                         font: 'Times New Roman';
                         color: gold;
                         background-color: blue;
+                        border: 2px solid black;
+                        padding: 0px;
                     }
                 """)
             case self.QUESTION:
@@ -67,10 +78,22 @@ class Question(QLabel):
                         font: 'Times New Roman';
                         color: white;
                         background-color: blue;
+                        border: 2px solid black;
+                        padding: 0px;
                     }
                 """)
             case self.BUZZING:
-                pass
+                self.can_buzz = False
+                rng = np.random.default_rng()
+
+                def toggle_buzz(question):
+                    question.can_buzz = True
+                    question.board.setStyleSheet("""
+                        QFrame {
+                            border: 10px solid lawngreen;
+                        }
+                    """)
+                QTimer.singleShot(1000 * (rng.random() + 1), lambda: toggle_buzz(self))
             case self.ANSWER:
                 self.setText(self.answer)
             case _:
