@@ -87,12 +87,12 @@ class Jeopardy(QMainWindow):
         self.show()
 
     def resizeEvent(self, event: QResizeEvent):
-        self.logo.setGeometry(self.width() * 0.1, 0, 
-                              self.width() * 0.5, self.height() * 0.25)
-        self.players.setGeometry(self.width() * 0.7, 0,
-                                 self.width() * 0.3, self.height())
-        self.board.setGeometry(0, self.height() * 0.25,
-                               self.width() * 0.7, self.height() * 0.75)
+        self.logo.setGeometry(self.width() * 0.1, self.height() * 0.01, 
+                              self.width() * 0.5, self.height() * 0.23)
+        self.players.setGeometry(self.width() * 0.71, self.height() * 0.01,
+                                 self.width() * 0.28, self.height() * 0.98)
+        self.board.setGeometry(self.width() * 0.01, self.height() * 0.26,
+                               self.width() * 0.68, self.height() * 0.73)
         
         self.play.setGeometry(self.width() * 0.025, self.height() * 0.1, 
                               self.width() * 0.05, self.height() * 0.05)
