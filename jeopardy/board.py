@@ -47,7 +47,7 @@ class Board(QFrame):
         """)
         self.display.hide()
         
-        self.root.on_player_selected.connect(self.player_connected)
+        self.root.on_player_selected.connect(self.player_selected)
     
     def resizeEvent(self, event: QResizeEvent):
         dw = self.width() / self.num_categories
