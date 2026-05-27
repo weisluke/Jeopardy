@@ -52,7 +52,15 @@ class Player(QFrame):
         self.labels["name"] = QLabel(self.labels["background"],
                                      alignment=(Qt.AlignVCenter | Qt.AlignHCenter),
                                      wordWrap=True)
-        self.labels["name"].setStyleSheet("background: transparent;")
+        self.labels["name"].setStyleSheet("""
+            QLabel {
+                font-size: 50pt;
+                font-weight: bold;
+                font: 'Times New Roman';
+                color: white;
+                background: transparent;
+            }
+        """)
         
         # Buttons for adding and subtracting money
         self.buttons = {}
