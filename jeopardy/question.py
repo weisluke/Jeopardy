@@ -42,6 +42,10 @@ class Question(QLabel):
     def board(self):
         return self.category.board
 
+    @property
+    def is_daily_double(self):
+        return self in self.board.daily_doubles
+
     def next(self):
         # if waiting on players to buzz in,
         # and all of the players can still buzz in,
@@ -95,6 +99,10 @@ class Question(QLabel):
                 if not self.root.players.can_buzz:
                     return
                 
+                # daily double is not buzzed on
+                if self.is_daily_double:
+                    return
+
                 self.can_buzz = False
                 rng = np.random.default_rng()
 
