@@ -158,21 +158,48 @@ class Player(QFrame):
             """)
 
     def add_money(self):
-        if self.root.curr_player is not self:
-            return
-        amount = self.root.curr_question.cost
+        amount = 0
+
+        if self.root.override.isChecked():
+            amount = self.root.wager.wager
+            self.root.wager.setText(None)
+            self.root.override.setChecked(False)
+        elif (self.root.curr_player is self
+                or (self.root.curr_question is not None
+                    and self.root.curr_question.is_daily_double)):
+
+            if self.root.curr_question.is_daily_double:
+                amount = self.root.wager.wager
+                self.root.wager.setText(None)
+            else:
+                amount = self.root.curr_question.cost
+            self.root.on_question_answered.emit()
+            self.root.on_player_deselected.emit()
+
         self.money += amount
-        self.root.on_question_answered.emit()
-        self.root.on_player_deselected.emit()
         self.update()
 
     def subtract_money(self):
-        if self.root.curr_player is not self:
-            return
-        amount = self.root.curr_question.cost
+        amount = 0
+
+        if self.root.override.isChecked():
+            amount = self.root.wager.wager
+            self.root.wager.setText(None)
+            self.root.override.setChecked(False)
+        elif (self.root.curr_player is self
+                or (self.root.curr_question is not None
+                    and self.root.curr_question.is_daily_double)):
+
+            if self.root.curr_question.is_daily_double:
+                amount = self.root.wager.wager
+                self.root.wager.setText(None)
+            else:
+                amount = self.root.curr_question.cost
+
+            self.can_buzz = False
+            self.root.on_player_deselected.emit()
+
         self.money -= amount
-        self.can_buzz = False
-        self.root.on_player_deselected.emit()
         self.update()
 
     @property
