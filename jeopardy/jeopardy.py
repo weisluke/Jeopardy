@@ -7,6 +7,7 @@ from pathlib import Path
 from logo import Logo
 from board import Board
 from players import Players
+from wager import Wager
 
 
 class Jeopardy(QMainWindow):
@@ -73,6 +74,7 @@ class Jeopardy(QMainWindow):
         self.play.clicked.connect(self.update)
 
         self.override = QCheckBox("override", self)
+        self.wager = Wager(self)
 
         # Initialize the player and the output device
         self.audio_output = QAudioOutput()
@@ -99,6 +101,8 @@ class Jeopardy(QMainWindow):
                               self.width() * 0.05, self.height() * 0.05)
         self.override.setGeometry(self.width() * 0.625, self.height() * 0.15,
                                   self.width() * 0.05, self.height() * 0.05)
+        self.wager.setGeometry(self.width() * 0.625, self.height() * 0.05,
+                               self.width() * 0.05, self.height() * 0.05)
 
     @property
     def MAX_NUM_ROUNDS(self):
