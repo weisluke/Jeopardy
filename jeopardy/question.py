@@ -32,6 +32,8 @@ class Question(QLabel):
         self.answer = answer
         self.cost = cost
 
+        self.root.on_player_deselected.connect(self.player_deselected)
+
     @property
     def root(self):
         return self.topLevelWidget()
@@ -83,6 +85,12 @@ class Question(QLabel):
                     }
                 """)
             case self.BUZZING:
+                # if a player answered correctly
+                # but we have not yet moved to the next state
+                # don't toggle buzzing
+                if not self.root.players.can_buzz:
+                    return
+                
                 self.can_buzz = False
                 rng = np.random.default_rng()
 
@@ -107,3 +115,6 @@ class Question(QLabel):
         if self.state > self.ANSWER:
             return
         self.root.on_question_selected.emit(self)
+
+    def player_deselected(self):
+        self.update()

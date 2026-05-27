@@ -155,6 +155,7 @@ class Player(QFrame):
         amount = self.root.curr_question.cost
         self.money += amount
         self.root.on_question_answered.emit()
+        self.root.on_player_deselected.emit()
         self.update()
 
     def subtract_money(self):

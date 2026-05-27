@@ -197,4 +197,3 @@ class Jeopardy(QMainWindow):
 
     def player_deselected(self):
         self.curr_player = None
-        self.curr_question.update()
