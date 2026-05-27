@@ -25,7 +25,6 @@ class Wager(QLineEdit):
         if self.root.override.isChecked():
             self.setEnabled(True)
         else:
-            self.setText(None)
             self.setEnabled(False)
 
     @property
