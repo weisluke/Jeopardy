@@ -1,6 +1,6 @@
-from PySide6.QtWidgets import QMainWindow, QPushButton
+from PySide6.QtWidgets import QMainWindow, QPushButton, QCheckBox
 from PySide6.QtGui import QResizeEvent
-from PySide6.QtCore import QUrl, QVariantAnimation, QTimer, Signal
+from PySide6.QtCore import QUrl, QVariantAnimation, QTimer, Signal, Qt
 from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
 import json
 from pathlib import Path
@@ -72,6 +72,8 @@ class Jeopardy(QMainWindow):
         """)
         self.play.clicked.connect(self.update)
 
+        self.override = QCheckBox("override", self)
+
         # Initialize the player and the output device
         self.audio_output = QAudioOutput()
         self.audio_player = QMediaPlayer(audioOutput=self.audio_output)
@@ -93,9 +95,10 @@ class Jeopardy(QMainWindow):
                                  self.width() * 0.28, self.height() * 0.98)
         self.board.setGeometry(self.width() * 0.01, self.height() * 0.26,
                                self.width() * 0.68, self.height() * 0.73)
-        
         self.play.setGeometry(self.width() * 0.025, self.height() * 0.1, 
                               self.width() * 0.05, self.height() * 0.05)
+        self.override.setGeometry(self.width() * 0.625, self.height() * 0.15,
+                                  self.width() * 0.05, self.height() * 0.05)
 
     @property
     def MAX_NUM_ROUNDS(self):

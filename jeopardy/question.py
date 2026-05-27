@@ -45,11 +45,15 @@ class Question(QLabel):
     def next(self):
         # if waiting on players to buzz in,
         # and all of the players can still buzz in,
+        # and not overriding
         # don't accidentally move forward to the answer
         if (self.state == self.BUZZING
-                and self.root.players.can_buzz):
+                and self.root.players.can_buzz
+                and not self.root.override.isChecked()):
             return
         
+        # disable override if moving to next state
+        self.root.override.setChecked(False)
         if self.state <= self.ANSWER:
             self.state += 1
         self.update()
