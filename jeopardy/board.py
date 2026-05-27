@@ -50,6 +50,22 @@ class Board(QFrame):
         self.root.on_question_answered.connect(self.question_answered)
         self.root.on_player_selected.connect(self.player_selected)
     
+        # create daily doubles
+        indices = []
+        for i in range(self.num_categories):
+            for j in range(self.num_questions):
+                indices.append([i, j])
+
+        rng = np.random.default_rng()
+        indices = rng.choice(indices, self.round)
+        self.daily_doubles = [self.categories[i].questions[j]
+                              for i, j in indices]
+        for what in self.daily_doubles:
+            print('Daily double:')
+            print(f'Category: {what.category.category}')
+            print(f'Cost: ${what.cost}')
+            print()
+    
     def resizeEvent(self, event: QResizeEvent):
         dw = self.width() / self.num_categories
         for i, category in enumerate(self.categories):
