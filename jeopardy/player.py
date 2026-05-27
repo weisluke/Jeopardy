@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QFrame, QLabel, QSizePolicy, QPushButton
-from PySide6.QtGui import QPixmap, QResizeEvent, QKeyEvent
-from PySide6.QtCore import QRect, Qt
+from PySide6.QtGui import QPixmap, QResizeEvent
+from PySide6.QtCore import QRect, Qt, QTimer
 from pathlib import Path
 
 
@@ -176,11 +176,17 @@ class Player(QFrame):
             return
         if not self.can_buzz:
             return
-        if self.root.curr_question is None:
+        
+        if not self.root.curr_question.can_buzz:
+            self.can_buzz = False
+            def toggle_buzz(player):
+                player.can_buzz = True
+            QTimer.singleShot(250, lambda: toggle_buzz(self))
             return
         
-        self.root.on_player_selected.emit(self)
-        print(f"{self.name} buzzed in\n")
+        if self.root.curr_player is None:
+            self.root.on_player_selected.emit(self)
+            print(f"{self.name} buzzed in\n")
 
     def player_selected(self, player):
         if player is not self:
