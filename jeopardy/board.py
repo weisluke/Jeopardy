@@ -157,6 +157,12 @@ class Board(QFrame):
         # cannot advance if player has been locked in
         if self.root.curr_player is not None:
             return
+        # cannot advance if current question is a daily double
+        # and no wager has been set
+        if (self.root.curr_question.is_daily_double
+                and self.root.curr_question.state == Question.COST
+                and self.root.wager.wager <= 0):
+            return
         
         self.root.curr_question.next()
 
