@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 from logo import Logo
 from board import Board
+from final_jeopardy import FinalJeopardy
 from players import Players
 from wager import Wager
 
@@ -58,6 +59,7 @@ class Jeopardy(QMainWindow):
 
         self.players = Players(self, self.dat["players"])
         self.board = Board(self, self.round, self.dat["rounds"][str(self.round)])
+        self.final_jeopardy = FinalJeopardy(self, self.dat["final jeopardy"])
 
         self.play = QPushButton("▶", self)
         self.play.setStyleSheet("""
@@ -97,6 +99,8 @@ class Jeopardy(QMainWindow):
                                  self.width() * 0.28, self.height() * 0.98)
         self.board.setGeometry(self.width() * 0.01, self.height() * 0.26,
                                self.width() * 0.68, self.height() * 0.73)
+        self.final_jeopardy.setGeometry(self.width() * 0.01, self.height() * 0.26,
+                                        self.width() * 0.68, self.height() * 0.73)
         self.play.setGeometry(self.width() * 0.025, self.height() * 0.1, 
                               self.width() * 0.05, self.height() * 0.05)
         self.override.setGeometry(self.width() * 0.625, self.height() * 0.15,
@@ -156,18 +160,19 @@ class Jeopardy(QMainWindow):
                 if not self.board.answering_questions:
                     self.next()
             case self.ROUND_COMPLETE:
+                self.board.deleteLater()
                 if self.board.round < self.MAX_NUM_ROUNDS:
                     self.round += 1
-                    self.board.deleteLater()
                     self.board = Board(self, self.round, self.dat["rounds"][str(self.round)])
                     self.board.show()
                     self.resizeEvent(None)
                     self.state = self.FLIP_QUESTIONS
                     return
+                else:
+                    self.final_jeopardy.show()
                 self.next()
             case self.FINAL_JEOPARDY:
-                print("FINAL JEOPARDY!")
-                self.next()
+                self.final_jeopardy.next()
             case _:
                 return
             
