@@ -108,6 +108,7 @@ class Question(QLabel):
                 QTimer.singleShot(1000 * (rng.random() + 1), lambda: toggle_buzz(self))
             case self.ANSWER:
                 self.setText(self.answer)
+                self.root.on_question_answered.emit()
             case _:
                 self.setText("")
                 if self.root.curr_question == self:

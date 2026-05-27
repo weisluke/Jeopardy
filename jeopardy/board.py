@@ -47,6 +47,7 @@ class Board(QFrame):
         """)
         self.display.hide()
         
+        self.root.on_question_answered.connect(self.question_answered)
         self.root.on_player_selected.connect(self.player_selected)
     
     def resizeEvent(self, event: QResizeEvent):
@@ -147,6 +148,9 @@ class Board(QFrame):
             self.display.setText(self.root.curr_question.text())
         else:
             self.display.setText("")
+    
+    def question_answered(self):
+        self.setStyleSheet(None)
 
     def player_selected(self, player):
         self.setStyleSheet(None)
