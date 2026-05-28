@@ -113,10 +113,6 @@ class Player(QFrame):
     def root(self):
         return self.topLevelWidget()
     
-    @property
-    def board(self):
-        return self.root.board
-        
     def next(self):
         if self.state <= self.NAME:
             self.state += 1

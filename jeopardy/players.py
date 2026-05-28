@@ -27,10 +27,6 @@ class Players(QFrame):
         return self.topLevelWidget()
     
     @property
-    def board(self):
-        return self.root.board
-
-    @property
     def num_players(self):
         return len(self.players)
 
