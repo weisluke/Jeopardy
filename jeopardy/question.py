@@ -121,6 +121,7 @@ class Question(QLabel):
                 # stop timer in case we've advanced to an answer early
                 # before the border has been changed
                 self.timer.stop()
+                self.root.wager.setText(None)
                 self.setText(self.answer)
                 self.root.on_question_answered.emit()
             case _:
