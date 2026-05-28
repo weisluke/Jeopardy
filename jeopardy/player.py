@@ -42,7 +42,7 @@ class Player(QFrame):
         self.labels["background"].setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
 
         where = Path(__file__).parent
-        pixmap = QPixmap(f'{where}/jeopardy.webp')
+        pixmap = QPixmap(f'{where}/jeopardy_dark.webp')
         width = pixmap.width()
         height = pixmap.height()
         rect = QRect(0, 3 * height / 4, width / 3, height / 4)

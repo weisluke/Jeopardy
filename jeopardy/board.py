@@ -14,7 +14,7 @@ class Board(QFrame):
         QFrame.__init__(self, parent)
 
         where = Path(__file__).parent
-        self.pixmap = QPixmap(f'{where}/jeopardy.webp')
+        self.pixmap = QPixmap(f'{where}/jeopardy_light.webp')
 
         self.round = round
         # dictionary of {category: {question: answer}, ...}

@@ -19,7 +19,7 @@ class Logo(QLabel):
         self.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
 
         where = Path(__file__).parent
-        pixmap = QPixmap(f'{where}/jeopardy.webp')
+        pixmap = QPixmap(f'{where}/jeopardy_dark.webp')
 
         width = pixmap.width()
         height = pixmap.height()
