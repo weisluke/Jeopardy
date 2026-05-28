@@ -67,11 +67,13 @@ class Board(QFrame):
             print()
     
     def resizeEvent(self, event: QResizeEvent):
-        dw = self.width() / self.num_categories
+        dw = self.width() * 0.98 / self.num_categories
         for i, category in enumerate(self.categories):
-            category.setGeometry(dw * i, 0, dw, self.height())
-        dh = self.height() / (self.num_questions + 1)
-        self.display.setGeometry(0, dh, self.width(), dh * self.num_questions)
+            category.setGeometry(self.width() * 0.01 + dw * i, self.height() * 0.01, 
+                                 dw, self.height() * 0.98)
+        dh = self.height() * 0.98 / (self.num_questions + 1)
+        self.display.setGeometry(self.width() * 0.01, self.height() * 0.01 + dh, 
+                                 self.width() * 0.98, dh * self.num_questions)
 
     @property
     def root(self):
