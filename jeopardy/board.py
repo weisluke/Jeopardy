@@ -33,7 +33,8 @@ class Board(QFrame):
 
         self.display = QLabel(self, 
                               alignment=(Qt.AlignVCenter | Qt.AlignHCenter),
-                              wordWrap=True)
+                              wordWrap=True,
+                              scaledContents=True)
         self.display.setStyleSheet("""
             QLabel {
                 font-size: 60pt;

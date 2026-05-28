@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import QMainWindow, QPushButton, QCheckBox
-from PySide6.QtGui import QResizeEvent
+from PySide6.QtGui import QResizeEvent, QPixmap
 from PySide6.QtCore import QUrl, QVariantAnimation, QTimer, Signal, Qt
 from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
 import json
@@ -186,7 +186,9 @@ class Jeopardy(QMainWindow):
 
         self.board.display.show()
         if self.curr_question.is_daily_double:
-            self.board.display.setText("Daily Double")
+            where = Path(__file__).parent
+            pixmap = QPixmap(f'{where}/daily_double.webp')
+            self.board.display.setPixmap(pixmap)
             
             where = Path(__file__).parent
             self.audio_player.setSource(QUrl.fromLocalFile(f'{where}/sounds/daily_double.mp3'))
