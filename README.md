@@ -1,0 +1,1 @@
+This repository contains code to create a Jeopardy! game using PySide6.
