@@ -183,7 +183,15 @@ class Jeopardy(QMainWindow):
             player.can_buzz = True
 
         self.board.display.show()
-        self.board.display.setText(self.curr_question.text())
+        if self.curr_question.is_daily_double:
+            self.board.display.setText("Daily Double")
+            
+            where = Path(__file__).parent
+            self.audio_player.setSource(QUrl.fromLocalFile(f'{where}/sounds/daily_double.mp3'))
+            self.audio_output.setVolume(1.0)
+            self.audio_player.play()
+        else:
+            self.board.display.setText(self.curr_question.text())
 
         print(f'Question: {self.curr_question.question}')
         print(f'Answer: {self.curr_question.answer}')
