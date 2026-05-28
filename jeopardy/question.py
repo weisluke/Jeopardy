@@ -113,8 +113,14 @@ class Question(QLabel):
                             border: 10px solid lawngreen;
                         }
                     """)
-                QTimer.singleShot(1000 * (rng.random() + 1), lambda: toggle_buzz(self))
+                self.timer = QTimer(self, singleShot=True,
+                                    interval=(1000 * (rng.random() + 1)))
+                self.timer.timeout.connect(lambda: toggle_buzz(self))
+                self.timer.start()
             case self.ANSWER:
+                # stop timer in case we've advanced to an answer early
+                # before the border has been changed
+                self.timer.stop()
                 self.setText(self.answer)
                 self.root.on_question_answered.emit()
             case _:
