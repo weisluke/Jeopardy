@@ -97,8 +97,9 @@ class Jeopardy(QMainWindow):
                               self.width() * 0.5, self.height() * 0.23)
         self.players.setGeometry(self.width() * 0.71, self.height() * 0.01,
                                  self.width() * 0.28, self.height() * 0.98)
-        self.board.setGeometry(self.width() * 0.01, self.height() * 0.26,
-                               self.width() * 0.68, self.height() * 0.73)
+        if self.board is not None:
+            self.board.setGeometry(self.width() * 0.01, self.height() * 0.26,
+                                   self.width() * 0.68, self.height() * 0.73)
         self.final_jeopardy.setGeometry(self.width() * 0.01, self.height() * 0.26,
                                         self.width() * 0.68, self.height() * 0.73)
         self.play.setGeometry(self.width() * 0.025, self.height() * 0.1, 
@@ -161,7 +162,8 @@ class Jeopardy(QMainWindow):
                     self.next()
             case self.ROUND_COMPLETE:
                 self.board.deleteLater()
-                if self.board.round < self.MAX_NUM_ROUNDS:
+                self.board = None
+                if self.round < self.MAX_NUM_ROUNDS:
                     self.round += 1
                     self.board = Board(self, self.round, self.dat["rounds"][str(self.round)])
                     self.board.show()
