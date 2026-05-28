@@ -1,5 +1,7 @@
 from PySide6.QtWidgets import QLabel
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QUrl
+from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
+from pathlib import Path
 
 
 class FinalJeopardy(QLabel):
@@ -7,7 +9,8 @@ class FinalJeopardy(QLabel):
     UNFLIPPED = 0
     CATEGORY = 1
     QUESTION = 2
-    ANSWER = 3
+    ANSWERING = 3
+    ANSWER = 4
 
     def __init__(self, parent, dat):
         QLabel.__init__(self, "Final Jeopardy", parent,
@@ -35,7 +38,18 @@ class FinalJeopardy(QLabel):
         self.state = self.UNFLIPPED
         self.hide()
 
+        self.audio_output = QAudioOutput()
+        self.audio_player = QMediaPlayer(audioOutput=self.audio_output)
+
+        where = Path(__file__).parent
+        self.audio_player.setSource(QUrl.fromLocalFile(f'{where}/sounds/final_jeopardy.mp3'))
+        self.audio_output.setVolume(1.0)
+
     def next(self):
+        # don't advance if answering questions and music is playing
+        if (self.state == self.ANSWERING and
+                self.audio_player.isPlaying()):
+            return
         if self.state <= self.ANSWER:
             self.state += 1
         self.update()
@@ -48,6 +62,8 @@ class FinalJeopardy(QLabel):
                 self.setText(self.category)
             case self.QUESTION:
                 self.setText(self.question)
+            case self.ANSWERING:
+                self.audio_player.play()
             case self.ANSWER:
                 self.setText(self.answer)
             case _:
