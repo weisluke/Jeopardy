@@ -1,6 +1,8 @@
 from PySide6.QtWidgets import QLabel, QSizePolicy
-from PySide6.QtCore import Qt, QTimer
+from PySide6.QtCore import Qt, QTimer, QUrl
+from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
 import numpy as np
+from pathlib import Path
 
 
 class Question(QLabel):
@@ -32,6 +34,35 @@ class Question(QLabel):
         self.answer = answer
         self.cost = cost
 
+        # set sounds for timeout
+        self.audio_output = QAudioOutput()
+        self.audio_player = QMediaPlayer(audioOutput=self.audio_output)
+
+        where = Path(__file__).parent
+        self.audio_player.setSource(QUrl.fromLocalFile(f'{where}/sounds/timeout.mp3'))
+        self.audio_output.setVolume(1.0)
+    
+        def timeout(question):
+            question.audio_player.play()
+            question.root.on_question_answered.emit()
+        self.timeout = QTimer(self, singleShot=True, interval=7000)
+        self.timeout.timeout.connect(lambda: timeout(self))
+
+        def toggle_buzz(question):
+            question.can_buzz = True
+            question.board.setStyleSheet("""
+                QFrame {
+                    border: 10px solid lawngreen;
+                }
+            """)
+            # question can be timed out
+            question.timeout.start()
+        
+        # timer for toggling buzz
+        self.toggle_buzz = QTimer(self, singleShot=True)
+        self.toggle_buzz.timeout.connect(lambda: toggle_buzz(self))
+
+        self.root.on_player_selected.connect(self.player_selected)
         self.root.on_player_deselected.connect(self.player_deselected)
 
     @property
@@ -101,26 +132,20 @@ class Question(QLabel):
                 
                 # daily double is not buzzed on
                 if self.is_daily_double:
+                    # but can be timed out
+                    self.timeout.start()
                     return
-
+                
                 self.can_buzz = False
                 rng = np.random.default_rng()
 
-                def toggle_buzz(question):
-                    question.can_buzz = True
-                    question.board.setStyleSheet("""
-                        QFrame {
-                            border: 10px solid lawngreen;
-                        }
-                    """)
-                self.timer = QTimer(self, singleShot=True,
-                                    interval=(1000 * (rng.random() + 1)))
-                self.timer.timeout.connect(lambda: toggle_buzz(self))
-                self.timer.start()
+                self.toggle_buzz.setInterval (1000 * (rng.random() + 1))
+                self.toggle_buzz.start()
             case self.ANSWER:
-                # stop timer in case we've advanced to an answer early
+                # stop timers in case we've advanced to an answer early
                 # before the border has been changed
-                self.timer.stop()
+                self.toggle_buzz.stop()
+                self.timeout.stop()
                 self.root.wager.setText(None)
                 self.setText(self.answer)
                 self.root.on_question_answered.emit()
@@ -135,6 +160,9 @@ class Question(QLabel):
         if self.state > self.ANSWER:
             return
         self.root.on_question_selected.emit(self)
+
+    def player_selected(self):
+        self.timeout.stop()
 
     def player_deselected(self):
         self.update()
