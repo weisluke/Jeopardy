@@ -1,4 +1,5 @@
 from PySide6.QtWidgets import QLabel
+from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt, QUrl
 from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
 from pathlib import Path
@@ -28,6 +29,10 @@ class FinalJeopardy(QLabel):
                 padding: 0px;
             }
         """)
+
+        where = Path(__file__).parent
+        self.pixmap = QPixmap(f'{where}/final_jeopardy.webp')
+        self.setPixmap(self.pixmap)
         
         for category, what in dat.items():
             self.category = category
