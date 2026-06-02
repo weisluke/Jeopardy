@@ -4,11 +4,11 @@ from PySide6.QtCore import QUrl, QVariantAnimation, QTimer, Signal, Qt
 from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
 import json
 from pathlib import Path
-from logo import Logo
-from board import Board
-from final_jeopardy import FinalJeopardy
-from players import Players
-from wager import Wager
+from .logo import Logo
+from .board import Board
+from .final_jeopardy import FinalJeopardy
+from .players import Players
+from .wager import Wager
 
 
 class Jeopardy(QMainWindow):

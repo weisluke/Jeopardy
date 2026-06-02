@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QFrame, QLabel, QSizePolicy
 from PySide6.QtCore import Qt
-from question import Question
+from .question import Question
 
 
 class Category(QFrame):

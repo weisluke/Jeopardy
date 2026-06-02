@@ -2,8 +2,8 @@ from PySide6.QtWidgets import QFrame, QLabel
 from PySide6.QtGui import QPixmap, QResizeEvent, Qt
 from PySide6.QtCore import QRect, QTimer, QUrl, QEventLoop
 from PySide6.QtMultimedia import QMediaPlayer
-from category import Category
-from question import Question
+from .category import Category
+from .question import Question
 from pathlib import Path
 import numpy as np
 

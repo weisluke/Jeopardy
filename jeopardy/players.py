@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QFrame
 from PySide6.QtGui import QResizeEvent
-from player import Player
+from .player import Player
 import numpy as np
 
 
