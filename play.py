@@ -1,6 +1,6 @@
 import sys
 from PySide6.QtWidgets import QApplication
-from jeopardy import Jeopardy
+from jeopardy.jeopardy import Jeopardy
 
 app = QApplication()
 
